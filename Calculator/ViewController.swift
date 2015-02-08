@@ -10,7 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var isTyping = false;
+    var isTyping = false
+    var numberStack = Array<Double>()
     
     @IBOutlet weak var display: UILabel!
     
@@ -24,5 +25,20 @@ class ViewController: UIViewController {
         }
     }
 
+    @IBAction func enter() {
+        isTyping = false
+        numberStack.append(displayValue)
+        println("stack = \(numberStack)")
+    }
+    
+    var displayValue: Double {
+        get {
+            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+        }
+        set {
+            display.text = "\(newValue)"
+            isTyping = false
+        }
+    }
 }
 
