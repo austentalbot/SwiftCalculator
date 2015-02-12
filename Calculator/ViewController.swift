@@ -9,9 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
+    var brain = CalculatorModel()
     
     var isTyping = false
-    var numberStack = Array<Double>()
     
     @IBOutlet weak var display: UILabel!
     
@@ -26,38 +26,25 @@ class ViewController: UIViewController {
     }
     
     @IBAction func operate(sender: UIButton) {
-        let operation = sender.currentTitle!
         if isTyping {
             enter()
         }
-        switch operation {
-            case "+": performDuoOperation({ $1 + $0 })
-            case "−": performDuoOperation({ $1 - $0 })
-            case "×": performDuoOperation({ $1 * $0 })
-            case "÷": performDuoOperation({ $1 / $0 })
-            case "√": performUniOperation({ sqrt($0) })
-            default: break
-        }
-    }
-    
-    func performDuoOperation(operation: (Double, Double) -> Double) {
-        if numberStack.count >= 2 {
-            displayValue = operation(numberStack.removeLast(), numberStack.removeLast())
-            enter()
-        }
-    }
-    
-    func performUniOperation(operation: Double -> Double) {
-        if numberStack.count >= 1 {
-            displayValue = operation(numberStack.removeLast())
-            enter()
+        if let operation = sender.currentTitle {
+            if let result = brain.performOperation(operation) {
+                displayValue = result
+            } else {
+                displayValue = 0
+            }
         }
     }
 
     @IBAction func enter() {
         isTyping = false
-        numberStack.append(displayValue)
-        println("stack = \(numberStack)")
+        if let result = brain.pushOperand(displayValue) {
+            displayValue = result
+        } else {
+            displayValue = 0
+        }
     }
     
     var displayValue: Double {

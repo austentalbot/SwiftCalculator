@@ -10,10 +10,23 @@ import Foundation
 
 class CalculatorModel {
     
-    private enum Op {
+    private enum Op: Printable {
         case Operand(Double)
         case UniOperation(String, Double -> Double)
         case DuoOperation(String, (Double, Double) -> Double)
+        
+        var description: String {
+            get {
+                switch self {
+                    case .Operand(let operand):
+                        return "\(operand)"
+                    case UniOperation(let symbol, _):
+                        return symbol
+                    case DuoOperation(let symbol, _):
+                        return symbol
+                }
+            }
+        }
     }
     
     private var knownOps = [String: Op]()
@@ -21,11 +34,15 @@ class CalculatorModel {
     private var opStack = [Op]()
     
     init() {
-        knownOps["+"] = Op.DuoOperation("+", +)
-        knownOps["−"] = Op.DuoOperation("−", { $1 - $0 })
-        knownOps["×"] = Op.DuoOperation("×", *)
-        knownOps["÷"] = Op.DuoOperation("÷", { $1 / $0 })
-        knownOps["√"] = Op.UniOperation("√", sqrt)
+        func learnOp(op: Op) {
+            knownOps[op.description] = op;
+        }
+        learnOp(Op.DuoOperation("+", +))
+        learnOp(Op.DuoOperation("−", { $1 - $0 }))
+        learnOp(Op.DuoOperation("×", *))
+        learnOp(Op.DuoOperation("÷", { $1 / $0 }))
+        learnOp(Op.UniOperation("√", sqrt))
+
     }
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op]) {
@@ -56,17 +73,20 @@ class CalculatorModel {
     
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
+        println("\(opStack) = \(result) with \(remainder) left over")
         return result
     }
     
-    func pushOperand(operand: Double) {
+    func pushOperand(operand: Double) -> Double? {
         opStack.append(Op.Operand(operand))
+        return evaluate()
     }
     
-    func performOperation(symbol: String) {
+    func performOperation(symbol: String) -> Double? {
         if let operation = knownOps[symbol] {
             opStack.append(operation)
         }
+        return evaluate()
     }
     
 }
