@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Darwin
 
 class CalculatorModel {
     
@@ -42,6 +43,8 @@ class CalculatorModel {
         learnOp(Op.DuoOperation("×", *))
         learnOp(Op.DuoOperation("÷", { $1 / $0 }))
         learnOp(Op.UniOperation("√", sqrt))
+        learnOp(Op.UniOperation("sin", sin))
+        learnOp(Op.UniOperation("cos", cos))
 
     }
     

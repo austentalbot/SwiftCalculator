@@ -17,10 +17,17 @@ class ViewController: UIViewController {
     
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
+        let newNumber = display.text! + digit
         if isTyping == true {
-            display.text = display.text! + digit
+            if let validNumber = NSNumberFormatter().numberFromString(newNumber) {
+                display.text = newNumber
+            }
         } else {
-            display.text = digit
+            if digit == "Π" {
+                display.text = "3.14159265359"
+            } else {
+                display.text = digit
+            }
             isTyping = true
         }
     }
