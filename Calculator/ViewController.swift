@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     var isTyping = false
     
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var history: UILabel!
     
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
@@ -48,6 +49,7 @@ class ViewController: UIViewController {
     @IBAction func enter() {
         isTyping = false
         if let result = brain.pushOperand(displayValue) {
+            history.text = history.text! + ", \(result)"
             displayValue = result
         } else {
             displayValue = 0
@@ -63,5 +65,6 @@ class ViewController: UIViewController {
             isTyping = false
         }
     }
+    
 }
 
