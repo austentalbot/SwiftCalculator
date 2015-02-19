@@ -33,11 +33,20 @@ class ViewController: UIViewController {
         }
     }
     
+    func addToHistory(value: String) {
+        if history.text! == "0" {
+            history.text = value
+        } else {
+            history.text = history.text! + " " + value
+        }
+    }
+    
     @IBAction func operate(sender: UIButton) {
         if isTyping {
-            enter()
+            process()
         }
         if let operation = sender.currentTitle {
+            addToHistory("\(operation)")
             if let result = brain.performOperation(operation) {
                 displayValue = result
             } else {
@@ -46,14 +55,18 @@ class ViewController: UIViewController {
         }
     }
 
-    @IBAction func enter() {
+    func process() {
         isTyping = false
         if let result = brain.pushOperand(displayValue) {
-            history.text = history.text! + ", \(result)"
             displayValue = result
         } else {
             displayValue = 0
         }
+    }
+    
+    @IBAction func enter() {
+        addToHistory("\(displayValue)")
+        process()
     }
     
     var displayValue: Double {

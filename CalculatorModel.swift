@@ -11,7 +11,7 @@ import Darwin
 
 class CalculatorModel {
     
-    private enum Op: Printable {
+    enum Op: Printable {
         case Operand(Double)
         case UniOperation(String, Double -> Double)
         case DuoOperation(String, (Double, Double) -> Double)
@@ -32,7 +32,7 @@ class CalculatorModel {
     
     private var knownOps = [String: Op]()
     
-    private var opStack = [Op]()
+    var opStack = [Op]()
     
     init() {
         func learnOp(op: Op) {
