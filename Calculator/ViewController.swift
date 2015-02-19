@@ -41,6 +41,13 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func clear(sender: UIButton) {
+        history.text = ""
+        displayValue = 0
+        isTyping = false
+        
+    }
+
     @IBAction func operate(sender: UIButton) {
         if isTyping {
             process()
