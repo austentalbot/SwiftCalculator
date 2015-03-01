@@ -60,11 +60,13 @@ class ViewController: UIViewController {
                 displayValue = nil
             }
         }
+        println("brain \(brain.opStack)")
+        println("brain description, \(brain.description)")
     }
 
     func process() {
         isTyping = false
-        if let result = brain.pushOperand(displayValue) {
+        if let result = brain.pushOperand(displayValue!) {
             displayValue = result
         } else {
             displayValue = nil
@@ -82,7 +84,7 @@ class ViewController: UIViewController {
         }
         set {
             if newValue != nil {
-                display.text = "\(newValue)"
+                display.text = "\(newValue!)"
             } else {
                 display.text = ""
             }

@@ -21,9 +21,9 @@ class CalculatorModel {
                 switch self {
                     case .Operand(let operand):
                         return "\(operand)"
-                    case UniOperation(let symbol, _):
+                    case .UniOperation(let symbol, _):
                         return symbol
-                    case DuoOperation(let symbol, _):
+                    case .DuoOperation(let symbol, _):
                         return symbol
                 }
             }
@@ -91,5 +91,25 @@ class CalculatorModel {
         }
         return evaluate()
     }
+    
+    var description: String {
+        get {
+            var remainingOps = opStack
+            return "".join(formatOperation(remainingOps.count - 1, arr: remainingOps).reverse())
+        }
+    }
+    
+    private func formatOperation(n: Int, arr: [Op]) -> [String] {
+        let op = arr[n]
+        switch op {
+        case .Operand(let operand):
+            return [" \(operand) "]
+        case .UniOperation(let symbol, _):
+            return [")"] + formatOperation(n - 1, arr: arr) + ["\(symbol)("]
+        case .DuoOperation(let symbol, _):
+            return formatOperation(n - 1, arr: arr) + ["\(symbol)"] + formatOperation(n - 2, arr: arr)
+        }
+    }
+    
     
 }
