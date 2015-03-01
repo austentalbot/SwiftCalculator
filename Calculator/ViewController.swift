@@ -43,7 +43,7 @@ class ViewController: UIViewController {
     
     @IBAction func clear(sender: UIButton) {
         history.text = ""
-        displayValue = 0
+        displayValue = nil
         isTyping = false
         
     }
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
             if let result = brain.performOperation(operation) {
                 displayValue = result
             } else {
-                displayValue = 0
+                displayValue = nil
             }
         }
     }
@@ -67,21 +67,25 @@ class ViewController: UIViewController {
         if let result = brain.pushOperand(displayValue) {
             displayValue = result
         } else {
-            displayValue = 0
+            displayValue = nil
         }
     }
     
     @IBAction func enter() {
-        addToHistory("\(displayValue)")
+        addToHistory("\(displayValue!)")
         process()
     }
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
             return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
         }
         set {
-            display.text = "\(newValue)"
+            if newValue != nil {
+                display.text = "\(newValue)"
+            } else {
+                display.text = ""
+            }
             isTyping = false
         }
     }
